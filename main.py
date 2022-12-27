@@ -94,6 +94,11 @@ while running:
     # Updating blocks positions and velocities
     for block in blocks:
         block["y"] += block_velocity
+        if (character_x + character_width > block["x"] and character_x < block["x"] + block["width"]) and (
+                character_y + character_height > block["y"] and character_y < block["y"] + block["height"]):
+            character_is_jumping = False
+            character_velocity_y = 0
+            print("Collision detected!")
 
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 255, 255), (platform_x, platform_y, platform_width, platform_height))
