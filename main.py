@@ -81,7 +81,7 @@ while running:
 
     now = pygame.time.get_ticks()
 
-    if now - start > 2000:
+    if now - start > 1500:
         start = now
         new_block = {
             "x": random.randint(0, screen_width - block_width),
@@ -91,14 +91,26 @@ while running:
         }
         blocks.append(new_block)
         last_block_y = new_block["y"]
+
     # Updating blocks positions and velocities
     for block in blocks:
         block["y"] += block_velocity
+
+    # Check for collisions with blocks
+    for block in blocks:
         if (character_x + character_width > block["x"] and character_x < block["x"] + block["width"]) and (
                 character_y + character_height > block["y"] and character_y < block["y"] + block["height"]):
+
             character_is_jumping = False
-            character_velocity_y = 0
-            print("Collision detected!")
+
+            if character_velocity_y > 0:
+                character_y = block["y"] - character_height
+
+            if character_y == block["y"] - character_height:
+                character_velocity_y = 5
+            # Check if the block has gone below the screen
+            if block["y"] >= screen_height:
+                blocks.remove(block)
 
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (255, 255, 255), (platform_x, platform_y, platform_width, platform_height))
